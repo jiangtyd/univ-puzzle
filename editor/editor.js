@@ -1,20 +1,22 @@
-function Board (gb) {
-    this.gb = gb;
+function Board (gb_input) {
+    var gb = gb_input;
     var cells = [], colorTable = new HashTable({});
     var vEdges = [], hEdges = [];
     var vertices = [];
+    var CELL_HEIGHT = 40, CELL_WIDTH = 40;
+    var width = 0, height = 0;
 
     var colorInputs = [];
     var colors = [];
         
-    this.deleteBoard = function() {
-        (this.gb).empty();
+    deleteBoard = function() {
+        (gb).empty();
     };
 
     var painting = false, alreadyPainting = false;
     var dragTargetColor, dragTargetColorIndex;
 
-    this.startPainting = function(evt) {
+    startPainting = function(evt) {
         painting = true;
         $("#currently_painting").text("Painting: true");
         var target = evt.target;
@@ -33,17 +35,17 @@ function Board (gb) {
         }
     }
 
-    this.stopPainting = function(evt) {
+    stopPainting = function(evt) {
         painting = false;
         $("#currently_painting").text("Painting: false");
     }
 
-    this.stopPainting2 = function(evt) {
+    stopPainting2 = function(evt) {
         painting = false;
         $("#currently_painting").text("MOUSELEFT Painting: false");
     }
 
-    this.toggleCell = function(evt) {
+    toggleCell = function(evt) {
         if(!painting) return null;
 
         var target = evt.target;
@@ -53,85 +55,80 @@ function Board (gb) {
         cells[parseInt(coords[0])][parseInt(coords[1])] = dragTargetColorIndex;
     }
     
-    this.numColors = function() {
-        return colors.length;
-    };
-
-    this.addColorInput = function(input) {
-        colorInputs.push(input);
-        colors.push('\#' + input.toString());
-    };
-
-    this.changeColor = function(i) {
-        newColor = '\#' + colorInputs[i].toString();
-        $("[fill='" + colors[i] + "']").attr("fill", newColor);
-        colors[i] = newColor
-    };
-
-    this.getCell = function(i,j) {
+    getCell = function(i,j) {
         return cells[i][j];
     };
 
-    this.getCells = function() {
+    getCells = function() {
         return cells;
     };
 
-    this.getCellsOfColor = function(i) {
+    getCellsOfColor = function(i) {
         return colorTable.getItem(i);
     };
 
-    this.getPainting = function() {
+    getPainting = function() {
         return painting;
     }
 
-    this.CELL_HEIGHT = 40, this.CELL_WIDTH = 40;
-    this.width = 0, this.height = 0;
+    return {
+        numColors: function() {
+            return colors.length;
+        },
+        addColorInput: function(input) {
+            colorInputs.push(input);
+            colors.push('\#' + input.toString());
+        },
+        changeColor: function(i) {
+            newColor = '\#' + colorInputs[i].toString();
+            $("[fill='" + colors[i] + "']").attr("fill", newColor);
+            colors[i] = newColor
+        },
+        createBoard: function(width, height) { 
+            width = width;
+            height = height;
 
-    this.createBoard = function(width, height) { 
-        this.width = width;
-        this.height = height;
+            $("#boardDiv").css({
+                "width" : width*(1+CELL_WIDTH) + 2,
+                "height" : height *(1+CELL_HEIGHT) + 2
+            });
 
-        $("#boardDiv").css({
-            "width" : width*(1+this.CELL_WIDTH) + 2,
-            "height" : height *(1+this.CELL_HEIGHT) + 2
-        });
+            $("#gameBoard").mouseleave(function() {
+                stopPainting2();
+            });
 
-        $("#gameBoard").mouseleave(function() {
-            stopPainting2();
-        });
+            // width, height measured in # cells
+            for(var i=0; i<width; i++) {
+                cells.push([]);
+                for(var j=0; j<height; j++) {
+                    var cell = newRect();
+                    if((i+j)%2 === 0) { 
+                        cells[i].push(0);
+                        colorTable.appendToItem(0, i+'_'+j); // cell ids are separated by '_'
+                        $(cell).attr("fill", colors[0]);
+                    } else {
+                        cells[i].push(1);
+                        colorTable.appendToItem(1, i+'_'+j);
+                        $(cell).attr("fill", colors[1]);
+                    }
 
-        // width, height measured in # cells
-        for(var i=0; i<width; i++) {
-            cells.push([]);
-            for(var j=0; j<height; j++) {
-                var cell = newRect();
-                if((i+j)%2 === 0) { 
-                    cells[i].push(0);
-                    colorTable.appendToItem(0, i+'_'+j); // cell ids are separated by '_'
-                    $(cell).attr("fill", colors[0]);
-                } else {
-                    cells[i].push(1);
-                    colorTable.appendToItem(1, i+'_'+j);
-                    $(cell).attr("fill", colors[1]);
-                }
+                    $(cell).attr({
+                        "width": CELL_WIDTH,
+                        "height": CELL_HEIGHT,
+                        "x": i*(1+CELL_WIDTH)+1,
+                        "y": j*(1+CELL_HEIGHT)+1,
+                        "id": "c"+i+"_"+j
+                    });
+                    $(cell).mousedown(startPainting);
+                    $(cell).mouseover(toggleCell);
+                    $(cell).mouseup(stopPainting);
 
-                $(cell).attr({
-                    "width": this.CELL_WIDTH,
-                    "height": this.CELL_HEIGHT,
-                    "x": i*(1+this.CELL_WIDTH)+1,
-                    "y": j*(1+this.CELL_HEIGHT)+1,
-                    "id": "c"+i+"_"+j
-                });
-                $(cell).mousedown(this.startPainting);
-                $(cell).mouseover(this.toggleCell);
-                $(cell).mouseup(this.stopPainting);
-
-                $(this.gb).append(cell);
-            }   
+                    $(gb).append(cell);
+                }   
+            }
         }
     };
 }
-
 
 var b;
 
