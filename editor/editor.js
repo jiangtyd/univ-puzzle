@@ -9,16 +9,16 @@ function Board (gb_input) {
     var colorInputs = [];
     var colors = [];
         
-    deleteBoard = function() {
-        (gb).empty();
-    };
-
     var painting = false, alreadyPainting = false;
     var dragTargetColor, dragTargetColorIndex;
 
-    startPainting = function(evt) {
+    var deleteBoard = function() {
+        (gb).empty();
+    };
+
+
+    var startPainting = function(evt) {
         painting = true;
-        $("#currently_painting").text("Painting: true");
         var target = evt.target;
         var fillColor = target.getAttribute("fill");
         var coords = target.getAttribute("id").substring(1).split('_');
@@ -35,17 +35,11 @@ function Board (gb_input) {
         }
     }
 
-    stopPainting = function(evt) {
+    var stopPainting = function(evt) {
         painting = false;
-        $("#currently_painting").text("Painting: false");
     }
 
-    stopPainting2 = function(evt) {
-        painting = false;
-        $("#currently_painting").text("MOUSELEFT Painting: false");
-    }
-
-    toggleCell = function(evt) {
+    var toggleCell = function(evt) {
         if(!painting) return null;
 
         var target = evt.target;
@@ -55,19 +49,19 @@ function Board (gb_input) {
         cells[parseInt(coords[0])][parseInt(coords[1])] = dragTargetColorIndex;
     }
     
-    getCell = function(i,j) {
+    var getCell = function(i,j) {
         return cells[i][j];
     };
 
-    getCells = function() {
+    var getCells = function() {
         return cells;
     };
 
-    getCellsOfColor = function(i) {
+    var getCellsOfColor = function(i) {
         return colorTable.getItem(i);
     };
 
-    getPainting = function() {
+    var getPainting = function() {
         return painting;
     }
 
@@ -94,7 +88,7 @@ function Board (gb_input) {
             });
 
             $("#gameBoard").mouseleave(function() {
-                stopPainting2();
+                stopPainting();
             });
 
             // width, height measured in # cells
@@ -223,7 +217,6 @@ function initColorMenu() {
     addColor("FFFFFF");
 
     var paintingDiv = document.createElement("div");
-    $(paintingDiv).attr("id", "currently_painting");
     $("#menu").append(paintingDiv);
 };
 
