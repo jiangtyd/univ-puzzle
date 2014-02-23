@@ -20,8 +20,8 @@ function Board (gb_input) {
     var startPainting = function(evt) {
         painting = true;
         var target = evt.target;
-        var fillColor = target.getAttribute("fill");
-        var coords = target.getAttribute("id").substring(1).split('_');
+        var fillColor = $(target).attr("fill");
+        var coords = $(target).attr("id").substring(1).split('_');
 
         for(var i = 0; i < colors.length; i++) {
             if(fillColor === colors[i]) {
