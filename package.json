@@ -1,0 +1,25 @@
+{
+  "name": "univ-puzzle",
+  "version": "1.0.0",
+  "description": "Universe puzzle editor",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiangtyd/univ-puzzle.git"
+  },
+  "keywords": [
+    "puzzle"
+  ],
+  "author": "jiangty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jiangtyd/univ-puzzle/issues"
+  },
+  "homepage": "https://github.com/jiangtyd/univ-puzzle",
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "lodash": "^4.17.3"
+  }
+}
