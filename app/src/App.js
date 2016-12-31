@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
-import Grid from './Grid/Grid'
+import GridContainer from './containers/GridContainer';
+import store from './Store';
 
 class App extends Component {
   render() {
@@ -15,7 +17,9 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
-          <Grid />
+          <Provider store={store}>
+            <GridContainer />
+          </Provider>
         </div>
       </div>
     );
