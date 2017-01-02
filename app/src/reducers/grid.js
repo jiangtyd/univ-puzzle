@@ -1,6 +1,7 @@
 var Immutable = require('immutable');
 var Cell = require('./cell');
 import { START_PAINTING, PAINT, STOP_PAINTING  } from '../actions';
+import { combineReducers } from 'redux';
 
 // In an m x n grid, we store
 // (2m+1) x (2n+1) "cells" to account for
@@ -38,8 +39,8 @@ const initialCols = 5;
 export const PAINTING_STATES = ['no', 'paused', 'yes'];
 
 export const initialState = Immutable.fromJS({
-  rows: initialRows,
-  cols: initialCols,
+  // rows: initialRows,
+  // cols: initialCols,
   grid: emptyGrid(initialRows, initialCols),
   paint: {
     painting: false,
@@ -48,28 +49,44 @@ export const initialState = Immutable.fromJS({
   },
 });
 
-export const grid = function(state = initialState, action) {
+export const paint = function(state = initialState.get('paint'), action) {
   switch (action.type) {
     case START_PAINTING:
       console.log('start painting');
-      return state.set('paint',
-        Immutable.fromJS({
-          painting: true,
-          fillId: action.fillId,
-          cellTypes: action.cellTypes
-        })
-      );
-    case PAINT:
-      console.log('paint state: ' + state.get('paint'));
-      if(state.getIn(['paint', 'painting']) && state.getIn(['paint', 'cellTypes']).has(state.getIn(['grid', action.gridY, action.gridX, 'type']))) {
-        console.log('successfully painting to color ' + state.getIn(['paint', 'fillId']));
-        return state.setIn(['grid', action.gridY, action.gridX, 'data'], state.getIn(['paint', 'fillId']).toString());
-      }
-      return state;
+      return Immutable.fromJS(
+          {
+            painting: true,
+            fillId: action.fillId,
+            cellTypes: action.cellTypes
+          }
+        );
     case STOP_PAINTING:
       console.log('stop painting');
-      return state.setIn(['paint', 'painting'], false);
+      return state.set('painting', false);
     default:
       return state;
   }
+}
+
+export const grid = function(state, action, paintState) {
+  switch (action.type) {
+    case PAINT:
+      console.log('paint state: ' + paintState);
+      if(paintState.get('painting') && paintState.get('cellTypes').has(state.getIn([action.gridY, action.gridX, 'type']))) {
+        console.log('successfully painting to color ' + paintState.get('fillId'));
+        return state.setIn([action.gridY, action.gridX, 'data'], paintState.get('fillId').toString());
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+export const puzzle = function(state = initialState, action) {
+  let paintState = paint(state.get('paint'), action);
+  let gridState = grid(state.get('grid'), action, paintState);
+  return state.merge({
+    paint: paintState,
+    grid: gridState
+  });
 }
