@@ -19,12 +19,14 @@ var face = data => cell(3, data);
 
 export const newCell = (type, data) => Immutable.fromJS({type: type, data: data});
 
+// example data: 'x', '3', etc
+
 export const isVertex = (cell) => cell.get('type') === 0;
 export const isHorizontalEdge = (cell) => cell.get('type') === 1;
 export const isVerticalEdge = (cell) => cell.get('type') === 2;
 export const isFace = (cell) => cell.get('type') === 3;
 
-export const CellType = {
+export const CellTypeMap = {
   0: 'vertex',
   1: 'horizontalEdge',
   2: 'verticalEdge',

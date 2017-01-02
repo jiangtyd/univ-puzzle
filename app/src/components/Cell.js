@@ -7,11 +7,13 @@ const fillColors = [
   "#00C",
 ]
 
-function Cell({ onClick, fillId, width, height, x, y, id }) {
+function Cell({ fillId, width, height, x, y, id, onMouseDown, onMouseOver, onMouseUp }) {
 
   return (
     <rect className="grid-face"
-      onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseOver={onMouseOver}
+      onMouseUp={onMouseUp}
       fill={fillColors[fillId]}
       width={width}
       height={height}
@@ -23,13 +25,15 @@ function Cell({ onClick, fillId, width, height, x, y, id }) {
 }
 
 Cell.propTypes = {
-  onClick: PropTypes.func.isRequired,
   fillId: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseOver: PropTypes.func.isRequired,
+  onMouseUp: PropTypes.func.isRequired,
 };
 
 export default Cell;

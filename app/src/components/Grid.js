@@ -1,12 +1,32 @@
 import React from 'react';
 import Cell from './Cell';
 
-function Grid({ cells, dimensions, onCellClick }) {
+function Grid({ cells, gridProps, dispatches }) {
   return (
-    <svg height={dimensions.height} width={dimensions.width}>
-      {cells.map(cellProps => <Cell key={cellProps.id} {...cellProps}
-        onClick={() => onCellClick(cellProps.gridX, cellProps.gridY, cellProps.fillId)}
-      />)}
+    <svg
+      height={gridProps.height}
+      width={gridProps.width}
+      onMouseLeave={(e) => {
+        e.preventDefault();
+        dispatches.onGridMouseLeave();
+      }}
+    >
+      {cells.map(cellProps =>
+        <Cell key={cellProps.id} {...cellProps}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            dispatches.onCellMouseDown(cellProps.gridX, cellProps.gridY, cellProps.fillId, [0, 1, 2, 3]);
+          }}
+          onMouseOver={(e) => {
+            e.preventDefault();
+            dispatches.onCellMouseOver(cellProps.gridX, cellProps.gridY);
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            dispatches.onCellMouseUp();
+          }}
+        />)
+      }
     </svg>
   );
 }

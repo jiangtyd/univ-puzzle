@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Grid from '../components/Grid';
-import { CellType } from '../reducers/cell';
-import { setCellFill } from '../actions';
+import { CellTypeMap } from '../reducers/cell';
+import { startPainting, paint, stopPainting } from '../actions';
 
 const gridRenderingProps = {
   vertex: {
@@ -29,24 +29,21 @@ const gridRenderingProps = {
 const mapStateToProps = (state) => {
   let {width: gapWidth, height: gapHeight} = gridRenderingProps.gap
   let cells = [];
-  let gridY = 0;
-  let y = 0;
-  let totalHeight = 0;
-  let totalWidth = 0;
-  console.log('start');
+  let gridY = 0, y = 0;
+  let totalHeight = 0, totalWidth = 0;
+  // console.log('start');
   for(let row of state.get('grid')) {
-    let gridX = 0;
-    let x = 0;
+    let gridX = 0, x = 0;
     let rowHeight = 0;
     for(let cell of row) {
       let {type, data} = cell.toJS();
       // console.log(cell.toJS());
-      let {width, height} = gridRenderingProps[CellType[type]];
+      let {width, height} = gridRenderingProps[CellTypeMap[type]];
       if (height > rowHeight) {
         rowHeight = height;
       }
       let cellProps = {
-        fillId: data.fillId,
+        fillId: data,
         width: width,
         height: height,
         x: x,
@@ -67,14 +64,14 @@ const mapStateToProps = (state) => {
     y += (rowHeight+gapHeight);
     ++gridY;
   }
-  y -= gapHeight
+  y -= gapHeight;
   if(y > totalHeight) {
     totalHeight = y;
   }
 
   return {
     cells: cells,
-    dimensions: {
+    gridProps: {
       height: totalHeight,
       width: totalWidth
     }
@@ -82,9 +79,23 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return { onCellClick: (gridX, gridY, fillId) => 
-    {
-      dispatch(setCellFill(gridX, gridY, (fillId+1)%4));
+  return {
+    dispatches: {
+      onCellMouseDown: (gridX, gridY, fillId, cellTypes) => {
+        dispatch(startPainting((Number(fillId)+1)%4, cellTypes));
+        dispatch(paint(gridX, gridY));
+      },
+      onCellMouseOver: (gridX, gridY) => {
+        dispatch(paint(gridX, gridY));
+      },
+      onCellMouseUp: () => {
+        console.log("mouseup");
+        dispatch(stopPainting());
+      },
+      onGridMouseLeave: () => {
+        console.log("mouse leave from grid");
+        dispatch(stopPainting());
+      },
     }
   };
 }

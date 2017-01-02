@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import grid from './reducers/grid';
+import { grid } from './reducers/grid';
 
 let store = createStore(grid);
 
