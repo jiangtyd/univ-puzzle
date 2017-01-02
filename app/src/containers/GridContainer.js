@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
         rowHeight = height;
       }
       let cellProps = {
-        fillId: data,
+        fillId: Number(data),
         width: width,
         height: height,
         x: x,
