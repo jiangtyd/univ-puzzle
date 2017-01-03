@@ -19,7 +19,19 @@ var face = data => cell(3, data);
 
 export const newCell = (type, data) => Immutable.fromJS({type: type, data: data});
 
-// example data: 'x', '3', etc
+// example data:
+/*
+ {
+   symbol: {
+     value: 1,
+     given: true
+   },
+   fill: {
+     value: 0,
+     given: false,
+   }
+ }
+*/
 
 export const isVertex = (cell) => cell.get('type') === 0;
 export const isHorizontalEdge = (cell) => cell.get('type') === 1;

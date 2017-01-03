@@ -7,22 +7,31 @@ const fillColors = [
   "#00C",
 ]
 
-function Cell({ fillId, width, height, x, y, id, onMouseDown, onMouseOver, onMouseUp }) {
-
-  return (
-    <rect className="grid-face"
-      onMouseDown={onMouseDown}
-      onMouseOver={onMouseOver}
-      onMouseUp={onMouseUp}
-      fill={fillColors[fillId]}
-      width={width}
-      height={height}
-      x={x}
-      y={y}
+let Cell = ({ fillId, width, height, x, y, id, onCellMouseDown, onCellMouseOver}) =>
+  (
+    <g className="grid-cell"
       id={id}
-    />
-   );
-}
+      onMouseDown={onCellMouseDown}
+      onMouseOver={onCellMouseOver}
+    >
+      <rect className="grid-cell-bg"
+        // fill={fillColors[fillId]}
+        width={width}
+        height={height}
+        x={x}
+        y={y}
+        id={id+'-bg'}
+      />
+      <rect className="grid-cell-value"
+        fill={fillColors[fillId]}
+        width={width}
+        height={height}
+        x={x}
+        y={y}
+        id={id+'-value'}
+      />
+    </g>
+  );
 
 Cell.propTypes = {
   fillId: PropTypes.number.isRequired,
@@ -31,9 +40,8 @@ Cell.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  onMouseDown: PropTypes.func.isRequired,
-  onMouseOver: PropTypes.func.isRequired,
-  onMouseUp: PropTypes.func.isRequired,
+  onCellMouseDown: PropTypes.func.isRequired,
+  onCellMouseOver: PropTypes.func.isRequired
 };
 
 export default Cell;

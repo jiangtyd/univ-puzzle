@@ -26,14 +26,17 @@ const gridRenderingProps = {
   },
 };
 
+const serializeGridXY = (gridX, gridY) => "c" + gridX + "-" + gridY;
+
 const mapStateToProps = (state) => {
   let {width: gapWidth, height: gapHeight} = gridRenderingProps.gap
   let cells = [];
-  let gridY = 0, y = 0;
+  let gridY = 0, y = 0, gridX = 0, x = 0;
   let totalHeight = 0, totalWidth = 0;
   // console.log('start');
   for(let row of state.get('grid')) {
-    let gridX = 0, x = 0;
+    gridX = 0;
+    x = 0;
     let rowHeight = 0;
     for(let cell of row) {
       let {type, data} = cell.toJS();
@@ -50,7 +53,7 @@ const mapStateToProps = (state) => {
         y: y,
         gridX: gridX,
         gridY: gridY,
-        id: "c" + gridX + "_" + gridY
+        id: serializeGridXY(gridX, gridY)
       };
       // console.log(cellProps);
       cells.push(cellProps);
@@ -72,8 +75,10 @@ const mapStateToProps = (state) => {
   return {
     cells: cells,
     gridProps: {
-      height: totalHeight,
-      width: totalWidth
+      height: gridY,
+      width: gridX,
+      renderHeight: totalHeight,
+      renderWidth: totalWidth
     }
   }
 }
@@ -88,7 +93,7 @@ const mapDispatchToProps = (dispatch) => {
       onCellMouseOver: (gridX, gridY) => {
         dispatch(paint(gridX, gridY));
       },
-      onCellMouseUp: () => {
+      onGridMouseUp: () => {
         console.log("mouseup");
         dispatch(stopPainting());
       },
