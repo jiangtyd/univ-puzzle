@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import { newCell } from './cell';
-import { START_PAINTING, PAINT, STOP_PAINTING  } from '../actions';
+import { PAINT, ENTER_TEXT } from '../actions';
 import { combineReducers } from 'redux';
 
 // In an m x n grid, we store
@@ -22,7 +22,7 @@ function* xrange(start, end) {
   }
 };
 
-let emptyGrid = (rows, cols) => (
+export const emptyGrid = (rows, cols) => (
   Immutable.fromJS(
     [...xrange(0, 2*rows+1)].map(row_idx => 
       [...xrange(0, 2*cols+1)].map(col_idx =>
@@ -33,48 +33,13 @@ let emptyGrid = (rows, cols) => (
   )
 );
 
-const initialRows = 3;
-const initialCols = 5;
-
-export const PAINTING_STATES = ['no', 'paused', 'yes'];
-
-export const initialState = Immutable.fromJS({
-  // rows: initialRows,
-  // cols: initialCols,
-  grid: emptyGrid(initialRows, initialCols),
-  paint: {
-    painting: false,
-    fillId: 0,
-    cellTypes: Immutable.Set.of(),
-  },
-});
-
-export const paint = function(state = initialState.get('paint'), action) {
-  switch (action.type) {
-    case START_PAINTING:
-      console.log('start painting');
-      return Immutable.fromJS(
-          {
-            painting: true,
-            fillId: action.fillId,
-            cellTypes: action.cellTypes
-          }
-        );
-    case STOP_PAINTING:
-      console.log('stop painting');
-      return state.set('painting', false);
-    default:
-      return state;
-  }
-}
-
-export const grid = function(state, action, paintState) {
+export const paintGrid = (state, action, paintState) => {
   switch (action.type) {
     case PAINT:
       // console.log('paint state: ' + paintState);
       if(paintState.get('painting') && paintState.get('cellTypes').has(state.getIn([action.gridY, action.gridX, 'type']))) {
         // console.log('successfully painting to color ' + paintState.get('fillId'));
-        return state.setIn([action.gridY, action.gridX, 'data'], paintState.get('fillId').toString());
+        return state.setIn([action.gridY, action.gridX, 'data'], String(paintState.get('fillId')));
       }
       return state;
     default:
@@ -82,11 +47,14 @@ export const grid = function(state, action, paintState) {
   }
 }
 
-export const puzzle = function(state = initialState, action) {
-  let paintState = paint(state.get('paint'), action);
-  let gridState = grid(state.get('grid'), action, paintState);
-  return state.merge({
-    paint: paintState,
-    grid: gridState
-  });
+export const enterInGrid = (state, action, entryState) => {
+  switch (action.type) {
+    case ENTER_TEXT:
+      if (entryState.get('cellSelected')) {
+        return state.setIn([action.gridY, action.gridX, 'data'], String(action.text));
+      }
+      return state;
+    default:
+      return state;
+  }
 }

@@ -15,7 +15,7 @@ function Grid({ cells, gridProps, dispatches }) {
       e.stopPropagation();
       dispatches.onCellMouseDown(gridX, gridY, cells[gridX + gridY*gridProps.width].value, [0, 1, 2, 3]);
     }
-    );
+  );
   let onCellMouseOver = (gridX, gridY) => (
     (e) => {
       e.preventDefault();

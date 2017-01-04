@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { puzzle } from './reducers/grid';
+import puzzle from './reducers/puzzle';
 
 let store = createStore(puzzle);
 
