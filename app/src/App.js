@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
-import GridContainer from './containers/GridContainer';
+import PuzzleContainer from './containers/PuzzleContainer';
 import store from './Store';
 
 class App extends Component {
@@ -18,7 +18,7 @@ class App extends Component {
         </p>
         <div>
           <Provider store={store}>
-            <GridContainer />
+            <PuzzleContainer />
           </Provider>
         </div>
       </div>

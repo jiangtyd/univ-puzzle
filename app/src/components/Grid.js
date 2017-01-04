@@ -8,7 +8,7 @@ const globalDrawProps = {
   strokeWidth: 0.5,
 }
 
-function Grid({ cells, gridProps, dispatches }) {
+let Grid = ({ cells, gridProps, dispatches }) => {
   let onCellMouseDown = (gridX, gridY) => (
     (e) => {
       e.preventDefault();
