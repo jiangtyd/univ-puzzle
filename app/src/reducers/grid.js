@@ -1,5 +1,5 @@
-var Immutable = require('immutable');
-var Cell = require('./cell');
+import Immutable from 'immutable';
+import { newCell } from './cell';
 import { START_PAINTING, PAINT, STOP_PAINTING  } from '../actions';
 import { combineReducers } from 'redux';
 
@@ -27,7 +27,7 @@ let emptyGrid = (rows, cols) => (
     [...xrange(0, 2*rows+1)].map(row_idx => 
       [...xrange(0, 2*cols+1)].map(col_idx =>
         // sick hack. (even, even) coordinates are vertices, (odd, even) are horizontal edges, (even, odd) are vertical edges, (odd, odd) are faces. coordinates look like (col_idx, row_idx)
-        Cell.newCell(2*(row_idx%2) + col_idx%2, '0')
+        newCell(2*(row_idx%2) + col_idx%2, '0')
       )
     )
   )

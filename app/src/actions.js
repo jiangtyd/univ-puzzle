@@ -1,4 +1,4 @@
-var Immutable = require('immutable');
+import Immutable from 'immutable';
 
 export const START_PAINTING = 'START_PAINTING';
 export const PAINT = 'PAINT';

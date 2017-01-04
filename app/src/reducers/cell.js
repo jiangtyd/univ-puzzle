@@ -1,4 +1,4 @@
-var Immutable = require('immutable');
+import Immutable from 'immutable';
 
 // A "cell" has a type (vertex, edge, face) and stores some data.
 // See grid.js
