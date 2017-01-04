@@ -20,16 +20,20 @@ var face = data => cell(3, data);
 export const newCell = (type, data) => Immutable.fromJS({type: type, data: data});
 
 // example data:
+// currently just a string/number.
 /*
+ * TODO: structure data like this
  {
-   symbol: {
+   value: {
      value: 1,
      given: true
+     // TODO: add "guesses"
    },
-   fill: {
+   bg: { // optional
      value: 0,
      given: false,
    }
+   // maybe add "possibilities" a la sudoku?
  }
 */
 

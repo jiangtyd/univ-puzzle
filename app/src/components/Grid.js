@@ -3,21 +3,26 @@ import Cell from './Cell';
 
 // const deserializeGridXY = (serialized) => serialized.substring(1).split('-').map(Number);
 
+const globalDrawProps = {
+  stroke: "#111",
+  strokeWidth: 0.5,
+}
+
 function Grid({ cells, gridProps, dispatches }) {
-  let onCellMouseDown = (gridX, gridY) => {
-    return (e) => {
+  let onCellMouseDown = (gridX, gridY) => (
+    (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dispatches.onCellMouseDown(gridX, gridY, cells[gridX + gridY*gridProps.width].fillId, [0, 1, 2, 3]);
+      dispatches.onCellMouseDown(gridX, gridY, cells[gridX + gridY*gridProps.width].value, [0, 1, 2, 3]);
     }
-  }
-  let onCellMouseOver = (gridX, gridY) => {
-    return (e) => {
+    );
+  let onCellMouseOver = (gridX, gridY) => (
+    (e) => {
       e.preventDefault();
       e.stopPropagation();
       dispatches.onCellMouseOver(gridX, gridY);
     }
-  }
+  );
   return (
     <svg
       height={gridProps.renderHeight}
@@ -30,6 +35,7 @@ function Grid({ cells, gridProps, dispatches }) {
         e.preventDefault();
         dispatches.onGridMouseUp();
       }}
+      {...globalDrawProps}
     >
       {cells.map(cellProps =>
         <Cell key={cellProps.id}

@@ -45,8 +45,9 @@ const mapStateToProps = (state) => {
       if (height > rowHeight) {
         rowHeight = height;
       }
+      // console.log("mapStateToProps cellProps = " + data);
       let cellProps = {
-        fillId: Number(data),
+        value: String(data),
         width: width,
         height: height,
         x: x,
@@ -86,8 +87,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatches: {
-      onCellMouseDown: (gridX, gridY, fillId, cellTypes) => {
-        dispatch(startPainting((Number(fillId)+1)%4, cellTypes));
+      onCellMouseDown: (gridX, gridY, value, cellTypes) => {
+        dispatch(startPainting((Number(value)+1)%4, cellTypes));
         dispatch(paint(gridX, gridY));
       },
       onCellMouseOver: (gridX, gridY) => {
