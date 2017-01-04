@@ -36,9 +36,7 @@ export const emptyGrid = (rows, cols) => (
 export const paintGrid = (state, action, paintState) => {
   switch (action.type) {
     case PAINT:
-      // console.log('paint state: ' + paintState);
       if(paintState.get('painting') && paintState.get('cellTypes').has(state.getIn([action.gridY, action.gridX, 'type']))) {
-        // console.log('successfully painting to color ' + paintState.get('fillId'));
         return state.setIn([action.gridY, action.gridX, 'data'], String(paintState.get('fillId')));
       }
       return state;

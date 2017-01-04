@@ -33,19 +33,16 @@ const mapStateToProps = (state) => {
   let cells = [];
   let gridY = 0, y = 0, gridX = 0, x = 0;
   let totalHeight = 0, totalWidth = 0;
-  // console.log('start');
   for(let row of state.get('grid')) {
     gridX = 0;
     x = 0;
     let rowHeight = 0;
     for(let cell of row) {
       let {type, data} = cell.toJS();
-      // console.log(cell.toJS());
       let {width, height} = gridRenderingProps[CellTypeMap[type]];
       if (height > rowHeight) {
         rowHeight = height;
       }
-      // console.log("mapStateToProps cellProps = " + data);
       let cellProps = {
         value: String(data),
         width: width,
@@ -56,7 +53,6 @@ const mapStateToProps = (state) => {
         gridY: gridY,
         id: serializeGridXY(gridX, gridY)
       };
-      // console.log(cellProps);
       cells.push(cellProps);
       x += (width+gapWidth);
       ++gridX;
@@ -95,11 +91,9 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(paint(gridX, gridY));
       },
       onGridMouseUp: () => {
-        console.log("mouseup");
         dispatch(stopPainting());
       },
       onGridMouseLeave: () => {
-        console.log("mouse leave from grid");
         dispatch(stopPainting());
       },
     }

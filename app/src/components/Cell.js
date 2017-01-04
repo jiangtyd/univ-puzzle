@@ -49,7 +49,6 @@ const renderCellValue = (value, width, height, x, y, id) => {
     cellWidth: width,
     cellHeight: height,
   }
-  // console.log("value in RenderingProps = " + value);
   let renderingProps = getRenderingProps(value);
   switch(renderingProps.type) {
     case CellValueType.NONE:
