@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import Grid from '../components/Grid';
 import { CellTypeMap } from '../reducers/cell';
-import { startPainting, paint, stopPainting } from '../actions';
+import { startPainting, paint, stopPainting, selectCell, deselectCell, enterText } from '../actions';
+import { INPUT_METHODS } from '../constants/inputmethods';
 
 const gridRenderingProps = {
   vertex: {
@@ -28,6 +29,13 @@ const gridRenderingProps = {
 
 const serializeGridXY = (gridX, gridY) => "c" + gridX + "-" + gridY;
 
+const isSelected = (state, gridX, gridY) => (
+    state.get('inputMethod') === INPUT_METHODS.ENTRY
+    && state.getIn(['entry', 'cellSelected'])
+    && state.getIn(['entry', 'selectionX']) === gridX
+    && state.getIn(['entry', 'selectionY']) === gridY
+);
+
 const mapStateToProps = (state) => {
   let {width: gapWidth, height: gapHeight} = gridRenderingProps.gap
   let cells = [];
@@ -51,6 +59,7 @@ const mapStateToProps = (state) => {
         y: y,
         gridX: gridX,
         gridY: gridY,
+        selected: isSelected(state, gridX, gridY),
         id: serializeGridXY(gridX, gridY)
       };
       cells.push(cellProps);
@@ -96,6 +105,15 @@ const mapDispatchToProps = (dispatch) => {
       onGridMouseLeave: () => {
         dispatch(stopPainting());
       },
+      onCellClick: (gridX, gridY) => {
+        dispatch(selectCell(gridX, gridY));
+      },
+      onEscape: () => {
+        dispatch(deselectCell());
+      },
+      onNumberKey: (number) => {
+        dispatch(enterText(String(number)));
+      }
     }
   };
 }
