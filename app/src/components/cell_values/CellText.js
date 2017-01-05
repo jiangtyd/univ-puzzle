@@ -12,8 +12,8 @@ const globalTextProps = {
  lengthAdjust: "spacingAndGlyphs"
 }
 
-const CellText = ({ value, cellX, cellY, cellHeight, cellWidth }) => (
-  <text className="grid-cell-value"
+const CellText = ({ value, cellX, cellY, cellHeight, cellWidth, id }) => (
+  <text id={id} className="grid-cell-value"
     x={cellX}
     y={cellY}
     dx={cellWidth*textProps.dxMult}
@@ -32,6 +32,7 @@ CellText.propTypes = {
   cellY: PropTypes.number.isRequired,
   cellHeight: PropTypes.number.isRequired,
   cellWidth: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default CellText;

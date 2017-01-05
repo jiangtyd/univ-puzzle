@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 
-let CellDot = ({ cellX, cellY, cellHeight, cellWidth }) => {
+let CellDot = ({ cellX, cellY, cellHeight, cellWidth, id}) => {
   let centerX = cellX + cellWidth*0.5;
   let centerY = cellY + cellHeight*0.5;
-  return <line
+  return <line id={id}
     x1={centerX} y1={centerY}
     x2={centerX} y2={centerY}
   />
@@ -14,6 +14,7 @@ CellDot.propTypes = {
   cellY: PropTypes.number.isRequired,
   cellWidth: PropTypes.number.isRequired,
   cellHeight: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default CellDot;

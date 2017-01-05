@@ -7,8 +7,8 @@ const fillProps = {
   ]
 }
 
-let CellFill = ({ value, cellX, cellY, cellHeight, cellWidth }) => (
-  <rect className="grid-cell-value"
+let CellFill = ({ value, cellX, cellY, cellHeight, cellWidth, id }) => (
+  <rect id={id} className="grid-cell-value"
     fill={fillProps.fillColors[value]}
     width={cellWidth}
     height={cellHeight}
@@ -23,6 +23,7 @@ CellFill.propTypes = {
   cellY: PropTypes.number.isRequired,
   cellWidth: PropTypes.number.isRequired,
   cellHeight: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default CellFill;
