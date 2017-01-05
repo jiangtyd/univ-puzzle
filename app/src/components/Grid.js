@@ -9,7 +9,27 @@ const globalDrawProps = {
   strokeWidth: 0.5,
 }
 
-let Grid = ({ cells, gridProps, dispatches }) => {
+const checkBounds = (x, y, width, height) => x >= 0 && x < width && y >= 0 && y < height;
+
+const nextCellIfPossible = (x, y, dx, dy, width, height) =>
+  checkBounds(x + dx, y + dy, width, height) ? [x + dx, y + dy] : [x, y];
+
+const directionToDxDy = (keyCode) => {
+  switch (keyCode) {
+    case 37: // left
+      return [-1, 0];
+    case 38: // up
+      return [0, -1];
+    case 39: // right
+      return [1, 0];
+    case 40: // down
+      return [0, 1];
+    default:
+      return [0, 0];
+  }
+}
+
+let Grid = ({ cells, gridProps, selectedCell, dispatches }) => {
   let getCellByCoords = (gridX, gridY) => cells[gridX + gridY*gridProps.width];
   let getTargetCell = (e) => {
     let t = e.target;
@@ -47,7 +67,7 @@ let Grid = ({ cells, gridProps, dispatches }) => {
       let target = getTargetCell(e);
       if (target) {
         let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
-        dispatches.onCellClick(gridX, gridY);
+        dispatches.onCellSelect(gridX, gridY);
       }
     }
   let onGridContainerDivClick =
@@ -60,12 +80,17 @@ let Grid = ({ cells, gridProps, dispatches }) => {
     (e) => {
       e.stopPropagation();
       let keyCode = Number(e.keyCode);
+      console.log("keyDown: " + keyCode);
       if(keyCode === 27) {
         dispatches.onEscape();
       } else if(keyCode >= 48 && keyCode <= 57) {
         dispatches.onNumberKey(keyCode-48);
+      } else if(keyCode >= 37 && keyCode <= 40) {
+        if (selectedCell) {
+          dispatches.onCellSelect(...nextCellIfPossible(selectedCell.x, selectedCell.y, ...directionToDxDy(keyCode), gridProps.width, gridProps.height));
+        }
       }
-    }
+   }
   return (
     <div id="grid-container-div" // name re-use, sorta, but oh well
       onClick={onGridContainerDivClick}

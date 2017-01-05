@@ -10,8 +10,8 @@ const initialRows = 7;
 const initialCols = 7;
 
 const initialState = Immutable.fromJS({
-  // rows: initialRows,
-  // cols: initialCols,
+  gridHeight: 2*initialRows+1,
+  gridWidth: 2*initialCols+1,
   grid: emptyGrid(initialRows, initialCols),
   // inputs
   inputMethod: INPUT_METHODS.PAINT,
@@ -37,11 +37,11 @@ const puzzle = (state = initialState, action) => {
   } else {
     switch (inputMethodState) {
       case INPUT_METHODS.PAINT:
-        paintState = paint(state.get('paint'), action);
+        paintState = paint(paintState, action);
         gridState = paintGrid(gridState, action, paintState);
         break;
       case INPUT_METHODS.ENTRY:
-        entryState = entry(state.get('entry'), action);
+        entryState = entry(entryState, action);
         gridState = enterInGrid(gridState, action, entryState);
         break;
       default:

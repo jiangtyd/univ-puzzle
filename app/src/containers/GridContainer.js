@@ -29,9 +29,13 @@ const gridRenderingProps = {
 
 const serializeGridXY = (gridX, gridY) => "c" + gridX + "-" + gridY;
 
-const isSelected = (state, gridX, gridY) => (
+const isAnyCellSelected = (state) => (
     state.get('inputMethod') === INPUT_METHODS.ENTRY
     && state.getIn(['entry', 'cellSelected'])
+);
+
+const isSelected = (state, gridX, gridY) => (
+    isAnyCellSelected(state)
     && state.getIn(['entry', 'selectionX']) === gridX
     && state.getIn(['entry', 'selectionY']) === gridY
 );
@@ -78,15 +82,27 @@ const mapStateToProps = (state) => {
     totalHeight = y;
   }
 
-  return {
+  let selectedCell;
+  if (isAnyCellSelected(state)) {
+    selectedCell = {
+      x: state.getIn(['entry', 'selectionX']),
+      y: state.getIn(['entry', 'selectionY'])
+    }
+  }
+
+  let ret = {
     cells: cells,
     gridProps: {
-      height: gridY,
-      width: gridX,
+      height: state.get('gridHeight'),
+      width: state.get('gridWidth'),
       renderHeight: totalHeight,
       renderWidth: totalWidth
     }
   }
+  if (selectedCell) {
+    ret.selectedCell = selectedCell;
+  }
+  return ret;
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -105,7 +121,7 @@ const mapDispatchToProps = (dispatch) => {
       onGridMouseLeave: () => {
         dispatch(stopPainting());
       },
-      onCellClick: (gridX, gridY) => {
+      onCellSelect: (gridX, gridY) => {
         dispatch(selectCell(gridX, gridY));
       },
       onEscape: () => {
