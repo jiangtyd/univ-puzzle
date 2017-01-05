@@ -38,6 +38,12 @@ export function selectCell(gridX, gridY) {
   };
 }
 
+export function deselectCell() {
+  return {
+    type: DESELECT_CELL,
+  };
+}
+
 export function enterText(text) {
   return {
     type: ENTER_TEXT,
