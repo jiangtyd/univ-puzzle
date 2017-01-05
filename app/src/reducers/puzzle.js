@@ -13,6 +13,7 @@ const initialState = Immutable.fromJS({
   // rows: initialRows,
   // cols: initialCols,
   grid: emptyGrid(initialRows, initialCols),
+  // inputs
   inputMethod: INPUT_METHODS.PAINT,
   paint: {
     painting: false,

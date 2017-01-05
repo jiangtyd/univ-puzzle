@@ -48,6 +48,7 @@ const renderCellValue = (value, width, height, x, y, id) => {
     cellY: y,
     cellWidth: width,
     cellHeight: height,
+    id: id+'-value',
   }
   let renderingProps = getRenderingProps(value);
   switch(renderingProps.type) {
@@ -64,11 +65,23 @@ const renderCellValue = (value, width, height, x, y, id) => {
   }
 };
 
-let Cell = ({ value, width, height, x, y, id, onCellMouseDown, onCellMouseOver}) => (
+const SELECTION_COLOR="#3377DD";
+
+const renderSelected = (width, height, x, y, id) => (
+  <rect className="grid-cell-selected"
+    fill={SELECTION_COLOR}
+    opacity={0.2}
+    width={width}
+    height={height}
+    x={x}
+    y={y}
+    id={id+'-selected'}
+  />
+);
+
+let Cell = ({ value, width, height, x, y, id, selected }) => (
     <g className="grid-cell"
       id={id}
-      onMouseDown={onCellMouseDown}
-      onMouseOver={onCellMouseOver}
     >
       <rect className="grid-cell-bg"
         // fill={fillColors[fillId]}
@@ -79,6 +92,7 @@ let Cell = ({ value, width, height, x, y, id, onCellMouseDown, onCellMouseOver})
         y={y}
         id={id+'-bg'}
       />
+      {selected && renderSelected(width, height, x, y, id)}
       {renderCellValue(value, width, height, x, y, id)}
     </g>
   );
@@ -90,8 +104,6 @@ Cell.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  onCellMouseDown: PropTypes.func.isRequired,
-  onCellMouseOver: PropTypes.func.isRequired
 };
 
 export default Cell;
