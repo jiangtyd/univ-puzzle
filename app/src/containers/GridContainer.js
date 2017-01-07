@@ -41,6 +41,7 @@ const isSelected = (state, gridX, gridY) => (
 );
 
 const mapStateToProps = (state) => {
+  let inputState = state.get('input');
   let {width: gapWidth, height: gapHeight} = gridRenderingProps.gap
   let cells = [];
   let gridY = 0, y = 0, gridX = 0, x = 0;
@@ -63,7 +64,7 @@ const mapStateToProps = (state) => {
         y: y,
         gridX: gridX,
         gridY: gridY,
-        selected: isSelected(state, gridX, gridY),
+        selected: isSelected(inputState, gridX, gridY),
         id: serializeGridXY(gridX, gridY)
       };
       cells.push(cellProps);
@@ -83,10 +84,10 @@ const mapStateToProps = (state) => {
   }
 
   let selectedCell;
-  if (isAnyCellSelected(state)) {
+  if (isAnyCellSelected(inputState)) {
     selectedCell = {
-      x: state.getIn(['entry', 'selectionX']),
-      y: state.getIn(['entry', 'selectionY'])
+      x: inputState.getIn(['entry', 'selectionX']),
+      y: inputState.getIn(['entry', 'selectionY'])
     }
   }
 

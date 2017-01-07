@@ -59,3 +59,7 @@ export function chooseInputMethod(method) {
     method: method
   };
 }
+
+const AFFECTS_GRID_STATE = Immutable.Set([PAINT, ENTER_TEXT]);
+export const affectsGridState = (actionType) =>
+  AFFECTS_GRID_STATE.contains(actionType);

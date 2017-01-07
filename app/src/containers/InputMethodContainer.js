@@ -4,7 +4,7 @@ import InputMethod from '../components/InputMethod';
 
 const mapStateToProps = (state) => {
   return {
-    currentInputMethod: state.get('inputMethod')
+    currentInputMethod: state.getIn(['input', 'inputMethod'])
   }
 }
 

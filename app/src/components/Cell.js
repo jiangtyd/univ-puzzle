@@ -70,7 +70,7 @@ const SELECTION_COLOR="#3377DD";
 const renderSelected = (width, height, x, y, id) => (
   <rect className="grid-cell-selected"
     fill={SELECTION_COLOR}
-    opacity={0.2}
+    opacity={0.4}
     width={width}
     height={height}
     x={x}
