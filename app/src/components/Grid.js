@@ -1,5 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
+import { CellTypeMap } from '../reducers/cell'
 
 // maps 'c1-1', 'c1-1-bg', 'c1-1-value' to [1, 1]
 const deserializeGridXY = (serialized) => serialized.substring(1).split('-').map(Number).slice(0, 2);
@@ -48,7 +49,7 @@ let Grid = ({ cells, gridProps, selectedCell, dispatches }) => {
       let target = getTargetCell(e);
       if (target) {
         let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
-        dispatches.onCellMouseDown(gridX, gridY, getCellByCoords(gridX, gridY).value, [0, 1, 2, 3]);
+        dispatches.onCellMouseDown(gridX, gridY, getCellByCoords(gridX, gridY).value, [CellTypeMap[0], CellTypeMap[1], CellTypeMap[2], CellTypeMap[3]]);
       }
     }
   let onCellMouseOver =

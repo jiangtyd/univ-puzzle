@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
     let rowHeight = 0;
     for(let cell of row) {
       let {type, data} = cell.toJS();
-      let {width, height} = gridRenderingProps[CellTypeMap[type]];
+      let {width, height} = gridRenderingProps[type];
       if (height > rowHeight) {
         rowHeight = height;
       }
