@@ -1,9 +1,10 @@
 import Immutable from 'immutable';
-import { CHOOSE_INPUT_METHOD, affectsGridState } from '../actions';
+import { CHOOSE_INPUT_METHOD, affectsGridState, CHOOSE_PLAY_MODE } from '../actions';
 import { emptyGrid, paintGrid, enterInGrid } from './grid';
 import paint from './paint';
 import entry from './entry';
 
+import { PLAY_MODES } from '../constants/playmodes';
 import { INPUT_METHODS } from '../constants/inputmethods';
 
 const initialRows = 7;
@@ -13,6 +14,7 @@ const initialState = Immutable.fromJS({
   gridHeight: 2*initialRows+1,
   gridWidth: 2*initialCols+1,
   grid: emptyGrid(initialRows, initialCols),
+  playMode: PLAY_MODES.GIVE,
   input: {
     inputMethod: INPUT_METHODS.PAINT,
     paint: {
@@ -27,6 +29,12 @@ const initialState = Immutable.fromJS({
     }
   }
 });
+
+const playMode = (state, action) => {
+  if (action.type === CHOOSE_PLAY_MODE) {
+    return state.set('playMode', action.mode);
+  }
+}
 
 const input = (state, action) => {
   if (action.type === CHOOSE_INPUT_METHOD) {
@@ -44,6 +52,7 @@ const input = (state, action) => {
 }
 
 const puzzle = (state = initialState, action) => {
+  let playModeState = state.get('playMode');
   let inputState = state.get('input');
   let inputMethodState = inputState.get('inputMethod');
   let gridState = state.get('grid');
@@ -56,6 +65,8 @@ const puzzle = (state = initialState, action) => {
       default:
         return state;
     }
+  } else if (action.type == CHOOSE_PLAY_MODE) {
+    return playMode(state, action);
   } else {
     return state.set('input', input(inputState, action));
   }

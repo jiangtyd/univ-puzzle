@@ -14,7 +14,7 @@ export function startPainting(fillId, cellTypes) {
 
 export function paint(gridX, gridY) {
   return {
-    type: PAINT,
+    type: PAINT, // TODO don't overload this string
     gridX: gridX,
     gridY: gridY,
   }
@@ -63,3 +63,13 @@ export function chooseInputMethod(method) {
 const AFFECTS_GRID_STATE = Immutable.Set([PAINT, ENTER_TEXT]);
 export const affectsGridState = (actionType) =>
   AFFECTS_GRID_STATE.contains(actionType);
+
+// giving vs solving
+export const CHOOSE_PLAY_MODE = 'CHOOSE_PLAY_MODE';
+
+export function choosePlayMode(mode) {
+  return {
+    type: CHOOSE_PLAY_MODE,
+    mode: mode
+  };
+}
