@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Grid from '../components/Grid';
-import { CellTypeMap } from '../reducers/cell';
+import { CellTypeMap } from '../constants/cell';
 import { startPainting, paint, stopPainting, selectCell, deselectCell, enterText } from '../actions';
 import { INPUT_METHODS } from '../constants/inputmethods';
 

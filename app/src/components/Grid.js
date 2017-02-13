@@ -1,6 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
-import { CellTypeMap } from '../reducers/cell'
+import { CellTypeMap } from '../constants/cell'
 
 // maps 'c1-1', 'c1-1-bg', 'c1-1-value' to [1, 1]
 const deserializeGridXY = (serialized) => serialized.substring(1).split('-').map(Number).slice(0, 2);
