@@ -1,31 +1,7 @@
 import { connect } from 'react-redux';
 import Grid from '../components/Grid';
-import { CellTypeMap } from '../constants/cell';
 import { startPainting, paint, stopPainting, selectCell, deselectCell, enterText } from '../actions';
 import { INPUT_METHODS } from '../constants/inputmethods';
-
-const gridRenderingProps = {
-  vertex: {
-    width: 4,
-    height: 4
-  },
-  horizontalEdge: {
-    width: 40,
-    height: 4
-  },
-  verticalEdge: {
-    width: 4,
-    height: 40
-  },
-  face: {
-    width: 40,
-    height: 40,
-  },
-  gap: {
-    width: 2,
-    height: 2,
-  },
-};
 
 const serializeGridXY = (gridX, gridY) => "c" + gridX + "-" + gridY;
 
@@ -42,7 +18,8 @@ const isSelected = (state, gridX, gridY) => (
 
 const mapStateToProps = (state) => {
   let inputState = state.get('input');
-  let {width: gapWidth, height: gapHeight} = gridRenderingProps.gap
+  let gridRenderingProps = state.getIn(['puzzleDefs', 'rendering', 'gridRenderingProps']);
+  let {width: gapWidth, height: gapHeight} = gridRenderingProps.get('gap').toJS();
   let cells = [];
   let gridY = 0, y = 0, gridX = 0, x = 0;
   let totalHeight = 0, totalWidth = 0;
@@ -52,12 +29,13 @@ const mapStateToProps = (state) => {
     let rowHeight = 0;
     for(let cell of row) {
       let {type, data} = cell.toJS();
-      let {width, height} = gridRenderingProps[type];
+      let {width, height} = gridRenderingProps.get(type).toJS();
       if (height > rowHeight) {
         rowHeight = height;
       }
       let cellProps = {
         value: String(data),
+        type: type,
         width: width,
         height: height,
         x: x,
@@ -93,6 +71,8 @@ const mapStateToProps = (state) => {
 
   let ret = {
     cells: cells,
+    rules: state.getIn(['puzzleDefs', 'rules']).toJS(),
+    rendering: state.getIn(['puzzleDefs', 'rendering']).toJS(),
     gridProps: {
       height: state.get('gridHeight'),
       width: state.get('gridWidth'),
@@ -109,8 +89,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatches: {
-      onCellMouseDown: (gridX, gridY, value, cellTypes) => {
-        dispatch(startPainting((Number(value)+1)%4, cellTypes));
+      onCellMouseDown: (gridX, gridY, newValue, cellTypes) => {
+        dispatch(startPainting(newValue, cellTypes));
         dispatch(paint(gridX, gridY));
       },
       onCellMouseOver: (gridX, gridY) => {

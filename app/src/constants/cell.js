@@ -31,9 +31,21 @@ export const CellTypeMap = {
   3: 'face'
 };
 
-export const CELL_TYPES = {
+export const CellType = {
   VERTEX: 'vertex',
   HORIZONTAL_EDGE: 'horizontalEdge',
   VERTICAL_EDGE: 'verticalEdge',
   FACE: 'face',
 }
+
+export const CellValueType = {
+  NONE:    'none',
+  TEXT:    'text',
+  FILL:    'fill',
+  DOT:     'dot',
+  RECT:    'rect',
+  LINE:    'line',
+  CIRCLE:  'circle',
+  X_SHAPE: 'x_shape'
+};
+

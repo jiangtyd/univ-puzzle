@@ -1,57 +1,12 @@
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import CellDot from './cell_values/CellDot';
 import CellFill from './cell_values/CellFill';
 import CellText from './cell_values/CellText';
+import { CellValueType } from '../constants/cell';
 
-export const CellValueType = {
-  NONE:    'none',
-  TEXT:    'text',
-  FILL:    'fill',
-  DOT:     'dot',
-  RECT:    'rect',
-  LINE:    'line',
-  CIRCLE:  'circle',
-  X_SHAPE: 'x_shape'
-};
-
-const markingRenderingProps = {
-  '': {
-    type: CellValueType.NONE,
-  },
-  "x": {
-    type: CellValueType.FILL,
-  },
-  "-": {
-    type: CellValueType.FILL,
-  }
-};
-
-const getRenderingProps = (value) => {
-  if(value in markingRenderingProps) {
-    return markingRenderingProps[value];
-  } else if(!isNaN(value)) { // is a number
-    return {
-      type: CellValueType.TEXT,
-      value: String(value)
-    };
-  } else {
-    return {
-      type: CellValueType.NONE,
-    };
-  }
-}
-
-const renderCellValue = (value, width, height, x, y, id) => {
-  let cellProps = {
-    cellX: x,
-    cellY: y,
-    cellWidth: width,
-    cellHeight: height,
-    id: id+'-value',
-  }
-  let renderingProps = getRenderingProps(value);
-  switch(renderingProps.type) {
+const drawCell = (renderedCell, cellProps) => {
+  let { type, value } = renderedCell;
+  switch(type) {
     case CellValueType.NONE:
       return;
     case CellValueType.TEXT:
@@ -63,6 +18,18 @@ const renderCellValue = (value, width, height, x, y, id) => {
     default:
       return;
   }
+};
+
+const renderCellValue = (value, width, height, x, y, id, rendering) => {
+  let renderedCell = rendering.renderValue(value);
+  let cellProps = {
+    cellX: x,
+    cellY: y,
+    cellWidth: width,
+    cellHeight: height,
+    id: id+'-value',
+  }
+  return drawCell(renderedCell, cellProps);
 };
 
 const SELECTION_COLOR="#3377DD";
@@ -79,7 +46,7 @@ const renderSelected = (width, height, x, y, id) => (
   />
 );
 
-let Cell = ({ value, width, height, x, y, id, selected }) => (
+let Cell = ({ value, width, height, x, y, id, selected, rendering }) => (
     <g className="grid-cell"
       id={id}
     >
@@ -93,7 +60,7 @@ let Cell = ({ value, width, height, x, y, id, selected }) => (
         id={id+'-bg'}
       />
       {selected && renderSelected(width, height, x, y, id)}
-      {renderCellValue(value, width, height, x, y, id)}
+      {renderCellValue(value, width, height, x, y, id, rendering)}
     </g>
   );
 

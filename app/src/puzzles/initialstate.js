@@ -42,25 +42,26 @@ function* xrange(start, end) {
   }
 };
 
-const defaultInitialValues = {
+const defaultInitialValues = Immutable.fromJS({
   vertex: 0,
   horizontalEdge: 0,
   verticalEdge: 0,
   face: 0
-};
+});
 
-export const initialGrid = (rows, cols, initialValues = defaultInitialValues) => (
+const initialGrid = (rows, cols, initialValues = defaultInitialValues) => (
   Immutable.fromJS(
     [...xrange(0, 2*rows+1)].map(row_idx =>
       [...xrange(0, 2*cols+1)].map(col_idx => {
         // sick hack. (even, even) coordinates are vertices, (odd, even) are horizontal edges, (even, odd) are vertical edges, (odd, odd) are faces. coordinates look like (col_idx, row_idx)
         var cellType = CellTypeMap[2*(row_idx%2) + col_idx%2];
-        return newCell(cellType, initialValues[cellType]);
+        return newCell(cellType, initialValues.get(cellType));
       })
     )
   )
 );
 
+/*
 const initialState = Immutable.fromJS({
   gridHeight: 2*initialRows+1,
   gridWidth: 2*initialCols+1,
@@ -80,8 +81,10 @@ const initialState = Immutable.fromJS({
     }
   }
 });
+*/
 
 const baseInitialState = Immutable.fromJS({
+  puzzleDefs: {},
   gridHeight: 2*initialRows+1,
   gridWidth: 2*initialCols+1,
   grid: initialGrid(initialRows, initialCols),
@@ -101,10 +104,9 @@ const baseInitialState = Immutable.fromJS({
   }
 });
 
-const initialStateFromPuzzle = (puzzle) => {
-  var state = baseInitialState
-    .set('grid', initialGrid(initialRows, initialCols, puzzle.get('initialValues')))
+export const initialStateForPuzzle = (puzzleDefs) => {
+  return baseInitialState
+    .set('puzzleDefs', puzzleDefs)
+    .set('grid', initialGrid(initialRows, initialCols, puzzleDefs.get('initialValues')))
     ;
 };
-
-export default initialState;

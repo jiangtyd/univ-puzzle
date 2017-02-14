@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
-import puzzle from './reducers/puzzle';
+import puzzleReducer from './reducers/puzzle';
 
-let store = createStore(puzzle);
+let store = createStore(puzzleReducer);
 
 export default store;

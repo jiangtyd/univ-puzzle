@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import Cell from './Cell';
 import { CellTypeMap } from '../constants/cell'
 
@@ -30,7 +31,9 @@ const directionToDxDy = (keyCode) => {
   }
 }
 
-let Grid = ({ cells, gridProps, selectedCell, dispatches }) => {
+const getNextCyclic = (list, idx) => list[(idx + 1) % list.length];
+
+let Grid = ({ cells, rules, rendering, gridProps, selectedCell, dispatches }) => {
   let getCellByCoords = (gridX, gridY) => cells[gridX + gridY*gridProps.width];
   let getTargetCell = (e) => {
     let t = e.target;
@@ -49,7 +52,10 @@ let Grid = ({ cells, gridProps, selectedCell, dispatches }) => {
       let target = getTargetCell(e);
       if (target) {
         let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
-        dispatches.onCellMouseDown(gridX, gridY, getCellByCoords(gridX, gridY).value, [CellTypeMap[0], CellTypeMap[1], CellTypeMap[2], CellTypeMap[3]]);
+        let cell = getCellByCoords(gridX, gridY);
+        let paintRules = rules.inputRules.GIVE.paintRules;
+        let valueList = paintRules[cell.type].left;
+        dispatches.onCellMouseDown(gridX, gridY, getNextCyclic(valueList, _.indexOf(valueList, cell.value)), _.keys(paintRules));
       }
     }
   let onCellMouseOver =
@@ -116,7 +122,7 @@ let Grid = ({ cells, gridProps, selectedCell, dispatches }) => {
       >
         {cells.map(cellProps =>
           <Cell key={cellProps.id}
-            {...cellProps}
+            {...cellProps} rendering={rendering}
           />)
         }
       </svg>

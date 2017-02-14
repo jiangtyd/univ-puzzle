@@ -2,7 +2,8 @@ import { CHOOSE_INPUT_METHOD, affectsGridState, CHOOSE_PLAY_MODE } from '../acti
 import { paintGrid, enterInGrid } from './grid';
 import paint from './paint';
 import entry from './entry';
-import initialState from '../puzzles/initialstate';
+import { initialStateForPuzzle } from '../puzzles/initialstate';
+import numberTestDefs from '../puzzles/number_test';
 
 import { INPUT_METHODS } from '../constants/inputmethods';
 
@@ -27,7 +28,7 @@ const input = (state, action) => {
   }
 }
 
-const puzzle = (state = initialState, action) => {
+const puzzleReducer = (state = initialStateForPuzzle(numberTestDefs), action) => {
   let playModeState = state.get('playMode');
   let inputState = state.get('input');
   let inputMethodState = inputState.get('inputMethod');
@@ -48,4 +49,4 @@ const puzzle = (state = initialState, action) => {
   }
 }
 
-export default puzzle;
+export default puzzleReducer;
