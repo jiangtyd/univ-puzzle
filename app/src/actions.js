@@ -4,10 +4,10 @@ export const START_PAINTING = 'START_PAINTING';
 export const PAINT = 'PAINT';
 export const STOP_PAINTING = 'STOP_PAINTING';
 
-export function startPainting(fillId, cellTypes) {
+export function startPainting(fillValue, cellTypes) {
   return {
     type: START_PAINTING,
-    fillId: fillId,
+    fillValue: fillValue,
     cellTypes: Immutable.Set(cellTypes) // cellTypes to paint
   };
 }

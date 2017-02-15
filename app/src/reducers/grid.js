@@ -4,7 +4,7 @@ export const paintGrid = (state, action, paintState) => {
   switch (action.type) {
     case PAINT:
       if(paintState.get('painting') && paintState.get('cellTypes').has(state.getIn([action.gridY, action.gridX, 'type']))) {
-        return state.setIn([action.gridY, action.gridX, 'data'], String(paintState.get('fillId')));
+        return state.setIn([action.gridY, action.gridX, 'data'], String(paintState.get('fillValue')));
       }
       return state;
     default:

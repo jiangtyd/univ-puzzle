@@ -65,7 +65,6 @@ let Cell = ({ value, type, gridX, gridY, id, selected, rendering }) => {
       id={id}
     >
       <rect className="grid-cell-bg"
-        // fill={fillColors[fillId]}
         opacity={0}
         width={width}
         height={height}

@@ -71,7 +71,7 @@ const initialState = Immutable.fromJS({
     inputMethod: INPUT_METHODS.PAINT,
     paint: {
       painting: false,
-      fillId: 0,
+      fillValue: "0",
       cellTypes: Immutable.Set.of(),
     },
     entry: {
@@ -93,7 +93,7 @@ const baseInitialState = Immutable.fromJS({
     inputMethod: INPUT_METHODS.PAINT,
     paint: {
       painting: false,
-      fillId: 0,
+      fillValue: "0",
       cellTypes: Immutable.Set.of(),
     },
     entry: {

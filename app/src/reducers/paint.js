@@ -7,7 +7,7 @@ const paint = (state, action) => {
       return Immutable.fromJS(
           {
             painting: true,
-            fillId: action.fillId,
+            fillValue: action.fillValue,
             cellTypes: action.cellTypes
           }
         );
