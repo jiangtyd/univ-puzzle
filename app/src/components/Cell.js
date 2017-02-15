@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import CellDot from './cell_values/CellDot';
 import CellFill from './cell_values/CellFill';
 import CellText from './cell_values/CellText';
-import { CellValueType } from '../constants/cell';
+import { CellValueType, CellTypeLengths } from '../constants/cell';
 
 const drawCell = (renderedCell, cellProps) => {
   let { type, value } = renderedCell;
@@ -46,7 +46,21 @@ const renderSelected = (width, height, x, y, id) => (
   />
 );
 
-let Cell = ({ value, width, height, x, y, id, selected, rendering }) => (
+// assume that grid has standard layout. TODO may want to not assume this
+const computeOffset = (n, { face, edge, gap }) => face * Math.floor(n/2) + edge * Math.floor((n+1)/2) + gap * n ;
+
+const computeCellProperties = (value, type, gridX, gridY, gridSizeProps) => (
+    {
+      width: gridSizeProps[CellTypeLengths[type].width],
+      height: gridSizeProps[CellTypeLengths[type].height],
+      x: computeOffset(gridX, gridSizeProps),
+      y: computeOffset(gridY, gridSizeProps)
+    }
+  );
+
+let Cell = ({ value, type, gridX, gridY, id, selected, rendering }) => {
+  let { width, height, x, y } = computeCellProperties(value, type, gridX, gridY, rendering.gridSizeProps);
+  return (
     <g className="grid-cell"
       id={id}
     >
@@ -63,14 +77,16 @@ let Cell = ({ value, width, height, x, y, id, selected, rendering }) => (
       {renderCellValue(value, width, height, x, y, id, rendering)}
     </g>
   );
+};
 
 Cell.propTypes = {
   value: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  gridX: PropTypes.number.isRequired,
+  gridY: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
+  rendering: PropTypes.object.isRequired
 };
 
 export default Cell;

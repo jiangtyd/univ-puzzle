@@ -16,72 +16,52 @@ const isSelected = (state, gridX, gridY) => (
     && state.getIn(['entry', 'selectionY']) === gridY
 );
 
+// assume that grid has standard layout. TODO may want to not assume this
+const computeDimension = (n, { face, edge, gap }) => face * Math.floor((n)/2) + edge * Math.floor((n+1)/2) + gap * (n-1);
+
 const mapStateToProps = (state) => {
   let inputState = state.get('input');
-  let gridRenderingProps = state.getIn(['puzzleDefs', 'rendering', 'gridRenderingProps']);
-  let {width: gapWidth, height: gapHeight} = gridRenderingProps.get('gap').toJS();
   let cells = [];
-  let gridY = 0, y = 0, gridX = 0, x = 0;
-  let totalHeight = 0, totalWidth = 0;
+  let gridY = 0, gridX = 0;
   for(let row of state.get('grid')) {
     gridX = 0;
-    x = 0;
-    let rowHeight = 0;
     for(let cell of row) {
-      let {type, data} = cell.toJS();
-      let {width, height} = gridRenderingProps.get(type).toJS();
-      if (height > rowHeight) {
-        rowHeight = height;
-      }
+      let { type, data } = cell.toJS();
       let cellProps = {
         value: String(data),
         type: type,
-        width: width,
-        height: height,
-        x: x,
-        y: y,
         gridX: gridX,
         gridY: gridY,
         selected: isSelected(inputState, gridX, gridY),
         id: serializeGridXY(gridX, gridY)
       };
       cells.push(cellProps);
-      x += (width+gapWidth);
       ++gridX;
     }
-    x -= gapWidth;
-    if(x > totalWidth) {
-      totalWidth = x;
-    }
-    y += (rowHeight+gapHeight);
     ++gridY;
   }
-  y -= gapHeight;
-  if(y > totalHeight) {
-    totalHeight = y;
-  }
 
-  let selectedCell;
-  if (isAnyCellSelected(inputState)) {
-    selectedCell = {
-      x: inputState.getIn(['entry', 'selectionX']),
-      y: inputState.getIn(['entry', 'selectionY'])
-    }
-  }
+  let gridHeight = state.get('gridHeight');
+  let gridWidth = state.get('gridWidth');
+  let rules = state.getIn(['puzzleDefs', 'rules']).toJS();
+  let rendering = state.getIn(['puzzleDefs', 'rendering']).toJS();
 
   let ret = {
     cells: cells,
-    rules: state.getIn(['puzzleDefs', 'rules']).toJS(),
-    rendering: state.getIn(['puzzleDefs', 'rendering']).toJS(),
+    rules: rules,
+    rendering: rendering,
     gridProps: {
-      height: state.get('gridHeight'),
-      width: state.get('gridWidth'),
-      renderHeight: totalHeight,
-      renderWidth: totalWidth
+      height: gridHeight,
+      width: gridWidth,
+      renderHeight: computeDimension(gridHeight, rendering.gridSizeProps),
+      renderWidth: computeDimension(gridWidth, rendering.gridSizeProps),
     }
   }
-  if (selectedCell) {
-    ret.selectedCell = selectedCell;
+  if (isAnyCellSelected(inputState)) {
+    ret.selectedCell = {
+      x: inputState.getIn(['entry', 'selectionX']),
+      y: inputState.getIn(['entry', 'selectionY'])
+    }
   }
   return ret;
 }

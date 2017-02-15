@@ -83,28 +83,28 @@ const renderValue = (value) => {
 }
 
 const gridSizeProps = {
-  faceWidth: 40,
-  edgeWidth: 2,
+  face: 40,
+  edge: 2,
   gap: 0
 }
 
-const gridRenderingProps = ({faceWidth, edgeWidth, gap}) => {
+const gridRenderingProps = ({face, edge, gap}) => {
   return {
     vertex: {
-      width: edgeWidth,
-      height: edgeWidth
+      width: edge,
+      height: edge
     },
     horizontalEdge: {
-      width: faceWidth,
-      height: edgeWidth
+      width: face,
+      height: edge
     },
     verticalEdge: {
-      width: edgeWidth,
-      height: faceWidth
+      width: edge,
+      height: face
     },
     face: {
-      width: faceWidth,
-      height: faceWidth,
+      width: face,
+      height: face,
     },
     gap: {
       width: gap,
@@ -124,6 +124,7 @@ const sudokuDefs = Immutable.fromJS({
     palette: palette,
     cellBackgrounds: cellBackgrounds,
     renderValue: renderValue,
+    gridSizeProps: gridSizeProps,
     gridRenderingProps: gridRenderingProps(gridSizeProps)
   }
 });

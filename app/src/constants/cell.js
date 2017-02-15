@@ -31,12 +31,16 @@ export const CellTypeMap = {
   3: 'face'
 };
 
-export const CellType = {
-  VERTEX: 'vertex',
-  HORIZONTAL_EDGE: 'horizontalEdge',
-  VERTICAL_EDGE: 'verticalEdge',
-  FACE: 'face',
-}
+
+export const CellTypeLengths = {
+  // vertex has the width of an edge and the height of an edge
+  vertex: { width: 'edge', height: 'edge' },
+  // horizontalEdge has the width of an face and the height of an edge
+  horizontalEdge: { width: 'face', height: 'edge' },
+  // etc
+  verticalEdge: { width: 'edge', height: 'face' },
+  face: { width: 'face', height: 'face' },
+};
 
 export const CellValueType = {
   NONE:    'none',
