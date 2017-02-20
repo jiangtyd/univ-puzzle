@@ -31,7 +31,6 @@ export const CellTypeMap = {
   3: 'face'
 };
 
-
 export const CellTypeLengths = {
   // vertex has the width of an edge and the height of an edge
   vertex: { width: 'edge', height: 'edge' },

@@ -3,6 +3,7 @@ import CellDot from './cell_values/CellDot';
 import CellFill from './cell_values/CellFill';
 import CellText from './cell_values/CellText';
 import { CellValueType, CellTypeLengths } from '../constants/cell';
+import "./Cell.css";
 
 const drawCell = (renderedCell, cellProps) => {
   let { type, value } = renderedCell;
@@ -32,20 +33,6 @@ const renderCellValue = (value, width, height, x, y, id, rendering) => {
   return drawCell(renderedCell, cellProps);
 };
 
-const SELECTION_COLOR="#3377DD";
-
-const renderSelected = (width, height, x, y, id) => (
-  <rect className="grid-cell-selected"
-    fill={SELECTION_COLOR}
-    opacity={0.4}
-    width={width}
-    height={height}
-    x={x}
-    y={y}
-    id={id+'-selected'}
-  />
-);
-
 // assume that grid has standard layout. TODO may want to not assume this
 const computeOffset = (n, { face, edge, gap }) => face * Math.floor(n/2) + edge * Math.floor((n+1)/2) + gap * n ;
 
@@ -60,11 +47,15 @@ const computeCellProperties = (value, type, gridX, gridY, gridSizeProps) => (
 
 let Cell = ({ value, type, gridX, gridY, id, selected, rendering }) => {
   let { width, height, x, y } = computeCellProperties(value, type, gridX, gridY, rendering.gridSizeProps);
+  let bg_classes = ["grid-cell-bg"];
+  if (selected) {
+    bg_classes.push("grid-cell-selected");
+  }
   return (
     <g className="grid-cell"
       id={id}
     >
-      <rect className="grid-cell-bg"
+      <rect className={bg_classes.join(" ")}
         opacity={0}
         width={width}
         height={height}
@@ -72,7 +63,6 @@ let Cell = ({ value, type, gridX, gridY, id, selected, rendering }) => {
         y={y}
         id={id+'-bg'}
       />
-      {selected && renderSelected(width, height, x, y, id)}
       {renderCellValue(value, width, height, x, y, id, rendering)}
     </g>
   );
