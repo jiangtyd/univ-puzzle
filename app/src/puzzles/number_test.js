@@ -52,6 +52,7 @@ const inputRules = {
 }
 
 const bg = {
+  stroke: "#FFF",
   fill: "#FFF",
   opacity: 0
 }

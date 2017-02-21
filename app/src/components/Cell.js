@@ -47,21 +47,22 @@ const computeCellProperties = (value, type, gridX, gridY, gridSizeProps) => (
 
 let Cell = ({ value, type, gridX, gridY, id, selected, rendering }) => {
   let { width, height, x, y } = computeCellProperties(value, type, gridX, gridY, rendering.gridSizeProps);
-  let bg_classes = ["grid-cell-bg"];
+  let bgClasses = ["grid-cell-bg"];
   if (selected) {
-    bg_classes.push("grid-cell-selected");
+    bgClasses.push("grid-cell-selected");
   }
+  let bgColor = rendering.cellBackgrounds[type];
   return (
     <g className="grid-cell"
       id={id}
     >
-      <rect className={bg_classes.join(" ")}
-        opacity={0}
+      <rect className={bgClasses.join(" ")}
         width={width}
         height={height}
         x={x}
         y={y}
         id={id+'-bg'}
+        {...bgColor}
       />
       {renderCellValue(value, width, height, x, y, id, rendering)}
     </g>

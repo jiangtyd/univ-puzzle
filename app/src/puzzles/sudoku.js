@@ -38,20 +38,18 @@ const inputRules = {
   }
 }
 
+grayBg = {
+  stroke: "#888",
+  fill: "#888",
+  opacity: 1
+}
+
 const cellBackgrounds = {
-  vertex: {
-    fill: "#888",
-    opacity: 1
-  },
-  horizontalEdge: {
-    fill: "#888"
-    opacity: 1
-  },
-  verticalEdge: {
-    fill: "#888",
-    opacity: 1
-  },
+  vertex: grayBg,
+  horizontalEdge: grayBg,
+  verticalEdge: grayBg,
   face: {
+    stroke: "#FFF",
     fill: "#FFF",
     opacity: 0
   }
