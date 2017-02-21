@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import '../Cell.css';
 
 const textProps = {
   dxMult: 0.5,
@@ -6,21 +7,15 @@ const textProps = {
   textLengthMult: 0.8
 }
 
-// todo css this
-const globalTextProps = {
- textAnchor: "middle",
- lengthAdjust: "spacingAndGlyphs"
-}
-
 const CellText = ({ value, cellX, cellY, cellHeight, cellWidth, id }) => (
-  <text id={id} className="grid-cell-value"
+  <text id={id} className="grid-cell-text-value"
     x={cellX}
     y={cellY}
     dx={cellWidth*textProps.dxMult}
     dy={cellHeight*textProps.dyMult}
     fontSize={cellHeight*textProps.dyMult + 'px'}
     textLength={cellWidth*textProps.textLengthMult}
-    {...globalTextProps}
+    lengthAdjust="spacingAndGlyphs"
   >
     {value}
   </text>

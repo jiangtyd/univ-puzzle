@@ -2,3 +2,7 @@
   fill: #3377DD !important;
   opacity: 0.4;
 }
+
+.grid-cell-text-value {
+  text-anchor: middle !important;
+}
