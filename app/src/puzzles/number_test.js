@@ -32,16 +32,16 @@ const rules = {
   },
   entryRules: {
     vertex: {
-      alphabet: alphabetList
+      alphabet: alphabet
     },
     horizontalEdge: {
-      alphabet: alphabetList
+      alphabet: alphabet
     },
     verticalEdge: {
-      alphabet: alphabetList
+      alphabet: alphabet
     },
     face: {
-      alphabet: alphabetList
+      alphabet: alphabet
     }
   }
 }

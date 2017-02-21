@@ -23,18 +23,23 @@ const mapStateToProps = (state) => {
   let inputState = state.get('input');
   let cells = [];
   let gridY = 0, gridX = 0;
+  let selectedCell;
   for(let row of state.get('grid')) {
     gridX = 0;
     for(let cell of row) {
       let { type, data } = cell.toJS();
+      let isCellSelected = isSelected(inputState, gridX, gridY);
       let cellProps = {
         value: String(data),
         type: type,
         gridX: gridX,
         gridY: gridY,
-        selected: isSelected(inputState, gridX, gridY),
+        selected: isCellSelected,
         id: serializeGridXY(gridX, gridY)
       };
+      if (isCellSelected) {
+        selectedCell = cellProps;
+      }
       cells.push(cellProps);
       ++gridX;
     }
@@ -57,11 +62,8 @@ const mapStateToProps = (state) => {
       renderWidth: computeDimension(gridWidth, rendering.gridSizeProps),
     }
   }
-  if (isAnyCellSelected(inputState)) {
-    ret.selectedCell = {
-      x: inputState.getIn(['entry', 'selectionX']),
-      y: inputState.getIn(['entry', 'selectionY'])
-    }
+  if (selectedCell) {
+    ret.selectedCell = selectedCell;
   }
   return ret;
 }
@@ -88,9 +90,9 @@ const mapDispatchToProps = (dispatch) => {
       onEscape: () => {
         dispatch(deselectCell());
       },
-      onNumberKey: (number) => {
-        dispatch(enterText(String(number)));
-      }
+      onAlphabetEntryKey: (character) => {
+        dispatch(enterText(String(character)));
+      },
     }
   };
 }

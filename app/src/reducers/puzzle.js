@@ -13,7 +13,7 @@ const playMode = (state, action) => {
   }
 }
 
-const input = (state, action) => {
+const input = (state, gridHeight, gridWidth, action) => {
   if (action.type === CHOOSE_INPUT_METHOD) {
     return state.set('inputMethod', action.method);
   } else {
@@ -21,7 +21,7 @@ const input = (state, action) => {
       case INPUT_METHODS.PAINT:
         return state.set('paint', paint(state.get('paint'), action));
       case INPUT_METHODS.ENTRY:
-        return state.set('entry', entry(state.get('entry'), action));
+        return state.set('entry', entry(state.get('entry'), gridHeight, gridWidth, action));
       default:
         return state;
     }
@@ -33,6 +33,8 @@ const puzzleReducer = (state = initialStateForPuzzle(numberTestDefs), action) =>
   let inputState = state.get('input');
   let inputMethodState = inputState.get('inputMethod');
   let gridState = state.get('grid');
+  let gridHeight = state.get('gridHeight');
+  let gridWidth = state.get('gridWidth');
   if (affectsGridState(action.type)) {
     switch (inputMethodState) {
       case INPUT_METHODS.PAINT:
@@ -45,7 +47,7 @@ const puzzleReducer = (state = initialStateForPuzzle(numberTestDefs), action) =>
   } else if (action.type === CHOOSE_PLAY_MODE) {
     return playMode(state, action);
   } else {
-    return state.set('input', input(inputState, action));
+    return state.set('input', input(inputState, gridHeight, gridWidth, action));
   }
 }
 
