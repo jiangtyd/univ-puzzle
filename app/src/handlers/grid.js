@@ -33,21 +33,23 @@ const directionToDxDy = (direction) => {
 export const createOnKeyDownHandler = (rules, gridProps, selectedCell, dispatches) => {
   return (e) => {
     e.stopPropagation();
-    let keyCode = Number(e.keyCode);
-    let character = _keycode(keyCode);
-    console.log("keyDown: " + keyCode);
-    if(character === 'esc') {
-      dispatches.onEscape();
-    } else if(Immutable.Set(rules.inputRules.GIVE.entryRules[selectedCell.type].alphabet).contains(character)) {
-      // only works for typeable non-shifted characters probably
-      dispatches.onAlphabetEntryKey(character);
-    } else if(directions.contains(character)) {
-      if (selectedCell) {
-        dispatches.onCellSelect(
-            ...nextCellIfPossible(
-              selectedCell.gridX, selectedCell.gridY,
-              ...directionToDxDy(_keycode(keyCode)),
-              gridProps.width, gridProps.height));
+    if (selectedCell) {
+      let keyCode = Number(e.keyCode);
+      let character = _keycode(keyCode);
+      console.log("keyDown: " + keyCode);
+      if(character === 'esc') {
+        dispatches.onEscape();
+      } else if(Immutable.Set(rules.inputRules.GIVE.entryRules[selectedCell.type].alphabet).contains(character)) {
+        // only works for typeable non-shifted characters probably
+        dispatches.onAlphabetEntryKey(character);
+      } else if(directions.contains(character)) {
+        if (selectedCell) {
+          dispatches.onCellSelect(
+              ...nextCellIfPossible(
+                selectedCell.gridX, selectedCell.gridY,
+                ...directionToDxDy(_keycode(keyCode)),
+                gridProps.width, gridProps.height));
+        }
       }
     }
   };
