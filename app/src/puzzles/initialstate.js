@@ -61,28 +61,6 @@ const initialGrid = (rows, cols, initialValues = defaultInitialValues) => (
   )
 );
 
-/*
-const initialState = Immutable.fromJS({
-  gridHeight: 2*initialRows+1,
-  gridWidth: 2*initialCols+1,
-  grid: initialGrid(initialRows, initialCols),
-  playMode: PLAY_MODES.GIVE,
-  input: {
-    inputMethod: INPUT_METHODS.PAINT,
-    paint: {
-      painting: false,
-      fillValue: "0",
-      cellTypes: Immutable.Set.of(),
-    },
-    entry: {
-      cellSelected: false,
-      selectionX: 0,
-      selectionY: 0,
-    }
-  }
-});
-*/
-
 const baseInitialState = Immutable.fromJS({
   puzzleDefs: {},
   gridHeight: 2*initialRows+1,
