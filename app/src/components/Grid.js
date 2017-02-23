@@ -16,7 +16,7 @@ let Grid = ({ cells, inputMethod, inputRules, rendering, gridProps, selectedCell
         e.preventDefault();
         e.stopPropagation();
       }}
-      onKeyDown={createOnKeyDownHandler(inputMethod, inputRules, gridProps, selectedCell, dispatches)}
+      onKeyDown={createOnKeyDownHandler(cells, inputMethod, inputRules, gridProps, selectedCell, dispatches)}
       tabIndex="-1" // allow focus so we can read keystrokes, but don't let user tab to focus this div
     >
       <svg
