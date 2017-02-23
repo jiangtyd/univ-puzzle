@@ -4,6 +4,7 @@ import paint from './paint';
 import entry from './entry';
 import { initialStateForPuzzle } from '../puzzles/initialstate';
 import numberTestDefs from '../puzzles/number_test';
+import sudokuDefs from '../puzzles/sudoku';
 
 import { INPUT_METHODS } from '../constants/inputmethods';
 
@@ -28,7 +29,7 @@ const input = (state, gridHeight, gridWidth, action) => {
   }
 }
 
-const puzzleReducer = (state = initialStateForPuzzle(numberTestDefs), action) => {
+const puzzleReducer = (state = initialStateForPuzzle(sudokuDefs), action) => {
   let playModeState = state.get('playMode');
   let inputState = state.get('input');
   let inputMethodState = inputState.get('inputMethod');

@@ -1,14 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
 import Cell from './Cell';
-import { createOnKeyDownHandler, createOnCellMouseDownHandler, createOnCellMouseOverHandler, createOnCellClickHandler } from '../handlers/grid';
+import { createOnKeyDownHandler, createOnCellMouseDownHandler, createOnCellMouseOverHandler } from '../handlers/grid';
 
 const globalDrawProps = {
   stroke: "#111",
   strokeWidth: 0.5,
 }
 
-let Grid = ({ cells, playMode, rules, rendering, gridProps, selectedCell, dispatches }) => {
+let Grid = ({ cells, inputMethod, inputRules, rendering, gridProps, selectedCell, dispatches }) => {
   return (
     <div id="grid-container-div" // name re-use, sorta, but oh well
       onClick={(e) => {
@@ -16,7 +16,7 @@ let Grid = ({ cells, playMode, rules, rendering, gridProps, selectedCell, dispat
         e.preventDefault();
         e.stopPropagation();
       }}
-      onKeyDown={createOnKeyDownHandler(playMode, rules, gridProps, selectedCell, dispatches)}
+      onKeyDown={createOnKeyDownHandler(inputMethod, inputRules, gridProps, selectedCell, dispatches)}
       tabIndex="-1" // allow focus so we can read keystrokes, but don't let user tab to focus this div
     >
       <svg
@@ -28,9 +28,8 @@ let Grid = ({ cells, playMode, rules, rendering, gridProps, selectedCell, dispat
           e.preventDefault();
           dispatches.onGridMouseUp();
         }}
-        onMouseDown={createOnCellMouseDownHandler(cells, playMode, rules, gridProps, dispatches)}
+        onMouseDown={createOnCellMouseDownHandler(cells, inputMethod, inputRules, gridProps, dispatches)}
         onMouseOver={createOnCellMouseOverHandler(dispatches)}
-        onClick={createOnCellClickHandler(dispatches)}
         height={gridProps.renderHeight}
         width={gridProps.renderWidth}
         {...globalDrawProps}

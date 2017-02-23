@@ -50,11 +50,12 @@ const mapStateToProps = (state) => {
   let gridWidth = state.get('gridWidth');
   let rules = state.getIn(['puzzleDefs', 'rules']).toJS();
   let rendering = state.getIn(['puzzleDefs', 'rendering']).toJS();
+  let playMode = state.get('playMode');
 
   let ret = {
     cells: cells,
-    playMode: state.get('playMode'),
-    rules: rules,
+    inputMethod: state.getIn(['input', 'inputMethod']),
+    inputRules: rules.inputRules[playMode],
     rendering: rendering,
     gridProps: {
       height: gridHeight,

@@ -38,7 +38,7 @@ const inputRules = {
   }
 }
 
-grayBg = {
+const grayBg = {
   stroke: "#888",
   fill: "#888",
   opacity: 1

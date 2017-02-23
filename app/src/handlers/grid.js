@@ -2,6 +2,8 @@ import _ from 'lodash';
 import Immutable from 'immutable';
 let _keycode = require('keycode'); // it's a function...
 
+import { INPUT_METHODS } from '../constants/inputmethods';
+
 /************
  * KEYBOARD *
  ************/
@@ -30,19 +32,18 @@ const directionToDxDy = (direction) => {
   }
 }
 
-export const createOnKeyDownHandler = (playMode, rules, gridProps, selectedCell, dispatches) => {
+export const createOnKeyDownHandler = (inputMethod, inputRules, gridProps, selectedCell, dispatches) => {
   return (e) => {
     e.stopPropagation();
-    if (selectedCell) {
+    if (inputMethod === INPUT_METHODS.ENTRY && selectedCell) {
+      let entryRules = inputRules.entryRules;
       let keyCode = Number(e.keyCode);
       let character = _keycode(keyCode);
       console.log("keyDown: " + keyCode);
       if(character === 'esc') {
         dispatches.onEscape();
-      } else if(Immutable.Set(rules.inputRules[playMode].entryRules[selectedCell.type].alphabet).contains(character)) {
-        // only works for typeable non-shifted characters probably
-        dispatches.onAlphabetEntryKey(character);
-      } else if(directions.contains(character)) {
+      }
+      else if(directions.contains(character)) {
         if (selectedCell) {
           dispatches.onCellSelect(
               ...nextCellIfPossible(
@@ -50,6 +51,9 @@ export const createOnKeyDownHandler = (playMode, rules, gridProps, selectedCell,
                 ...directionToDxDy(_keycode(keyCode)),
                 gridProps.width, gridProps.height));
         }
+      } else if(selectedCell.type in entryRules && Immutable.Set(entryRules[selectedCell.type].alphabet).contains(character)) {
+        // only works for typeable non-shifted characters probably
+        dispatches.onAlphabetEntryKey(character);
       }
     }
   };
@@ -74,7 +78,7 @@ const getTargetCell = (e) => {
   }
 }
 
-export const createOnCellMouseDownHandler = (cells, playMode, rules, gridProps, dispatches) => {
+const createPaintOnMouseDownHandler = (cells, paintRules, gridProps, dispatches) => {
   const getCellByCoords = (gridX, gridY) => cells[gridX + gridY*gridProps.width];
   return (e) => {
     e.preventDefault();
@@ -83,11 +87,44 @@ export const createOnCellMouseDownHandler = (cells, playMode, rules, gridProps, 
     if (target) {
       let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
       let cell = getCellByCoords(gridX, gridY);
-      let paintRules = rules.inputRules[playMode].paintRules;
-      let valueList = paintRules[cell.type].left;
-      dispatches.onCellMouseDown(gridX, gridY, getNextCyclic(valueList, _.indexOf(valueList, cell.value)), _.keys(paintRules));
+      // TODO support other kinds of mousedown events other than left click
+      if (cell.type in paintRules) {
+        let valueList = paintRules[cell.type].left;
+        dispatches.onCellMouseDown(gridX, gridY, getNextCyclic(valueList, _.indexOf(valueList, cell.value)), _.keys(paintRules));
+      }
     }
   };
+}
+
+const createEntryOnMouseDownHandler = (dispatches) => {
+  return (e) => {
+    e.preventDefault();
+    let target = getTargetCell(e);
+    if (target) {
+      let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
+      dispatches.onCellSelect(gridX, gridY);
+    }
+  };
+}
+
+export const createOnCellMouseDownHandler = (cells,  inputMethod, inputRules, gridProps, dispatches) => {
+  switch (inputMethod) {
+    case INPUT_METHODS.PAINT:
+      if ('paintRules' in inputRules) {
+        return createPaintOnMouseDownHandler(cells, inputRules.paintRules, gridProps, dispatches);
+      }
+      break;
+    case INPUT_METHODS.ENTRY:
+      if ('entryRules' in inputRules) {
+        return createEntryOnMouseDownHandler(dispatches);
+      }
+      break;
+    default:
+      break;
+  }
+  return (e) => {
+    e.preventDefault();
+  }
 }
 
 export const createOnCellMouseOverHandler = (dispatches) => {
@@ -98,17 +135,6 @@ export const createOnCellMouseOverHandler = (dispatches) => {
     if (target) {
       let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
       dispatches.onCellMouseOver(gridX, gridY);
-    }
-  };
-}
-
-export const createOnCellClickHandler = (dispatches) => {
-  return (e) => {
-    e.preventDefault();
-    let target = getTargetCell(e);
-    if (target) {
-      let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
-      dispatches.onCellSelect(gridX, gridY);
     }
   };
 }
