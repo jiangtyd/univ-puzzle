@@ -6,14 +6,14 @@ import { CellValueType, CellTypeLengths } from '../constants/cell';
 import "./Cell.css";
 
 const drawCell = (renderedCell, cellProps) => {
-  let { type, value } = renderedCell;
+  let { type, value, color } = renderedCell;
   switch(type) {
     case CellValueType.NONE:
       return;
     case CellValueType.TEXT:
       return (<CellText value={value} {...cellProps} />);
     case CellValueType.FILL:
-      return (<CellFill value={value} {...cellProps} />);
+      return (<CellFill color={color} {...cellProps} />);
     case CellValueType.DOT:
       return (<CellDot {...cellProps} />);
     default:

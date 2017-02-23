@@ -1,15 +1,8 @@
 import React, { PropTypes } from 'react';
 
-const fillProps = {
-  fillColors: [
-    'x': "#000",
-    '-': "#DDD",
-  ]
-}
-
-let CellFill = ({ value, cellX, cellY, cellHeight, cellWidth, id }) => (
+let CellFill = ({ color, cellX, cellY, cellHeight, cellWidth, id }) => (
   <rect id={id} className="grid-cell-value"
-    fill={fillProps.fillColors[value]}
+    fill={color}
     width={cellWidth}
     height={cellHeight}
     x={cellX}
@@ -18,7 +11,7 @@ let CellFill = ({ value, cellX, cellY, cellHeight, cellWidth, id }) => (
 );
 
 CellFill.propTypes = {
-  value: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
   cellX: PropTypes.number.isRequired,
   cellY: PropTypes.number.isRequired,
   cellWidth: PropTypes.number.isRequired,
