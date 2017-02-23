@@ -30,7 +30,7 @@ const directionToDxDy = (direction) => {
   }
 }
 
-export const createOnKeyDownHandler = (rules, gridProps, selectedCell, dispatches) => {
+export const createOnKeyDownHandler = (playMode, rules, gridProps, selectedCell, dispatches) => {
   return (e) => {
     e.stopPropagation();
     if (selectedCell) {
@@ -39,7 +39,7 @@ export const createOnKeyDownHandler = (rules, gridProps, selectedCell, dispatche
       console.log("keyDown: " + keyCode);
       if(character === 'esc') {
         dispatches.onEscape();
-      } else if(Immutable.Set(rules.inputRules.GIVE.entryRules[selectedCell.type].alphabet).contains(character)) {
+      } else if(Immutable.Set(rules.inputRules[playMode].entryRules[selectedCell.type].alphabet).contains(character)) {
         // only works for typeable non-shifted characters probably
         dispatches.onAlphabetEntryKey(character);
       } else if(directions.contains(character)) {
@@ -74,7 +74,7 @@ const getTargetCell = (e) => {
   }
 }
 
-export const createOnCellMouseDownHandler = (cells, rules, gridProps, dispatches) => {
+export const createOnCellMouseDownHandler = (cells, playMode, rules, gridProps, dispatches) => {
   const getCellByCoords = (gridX, gridY) => cells[gridX + gridY*gridProps.width];
   return (e) => {
     e.preventDefault();
@@ -83,7 +83,7 @@ export const createOnCellMouseDownHandler = (cells, rules, gridProps, dispatches
     if (target) {
       let [gridX, gridY] = deserializeGridXY(target.getAttribute('id'));
       let cell = getCellByCoords(gridX, gridY);
-      let paintRules = rules.inputRules.GIVE.paintRules;
+      let paintRules = rules.inputRules[playMode].paintRules;
       let valueList = paintRules[cell.type].left;
       dispatches.onCellMouseDown(gridX, gridY, getNextCyclic(valueList, _.indexOf(valueList, cell.value)), _.keys(paintRules));
     }

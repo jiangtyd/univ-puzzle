@@ -8,7 +8,7 @@ const globalDrawProps = {
   strokeWidth: 0.5,
 }
 
-let Grid = ({ cells, rules, rendering, gridProps, selectedCell, dispatches }) => {
+let Grid = ({ cells, playMode, rules, rendering, gridProps, selectedCell, dispatches }) => {
   return (
     <div id="grid-container-div" // name re-use, sorta, but oh well
       onClick={(e) => {
@@ -16,7 +16,7 @@ let Grid = ({ cells, rules, rendering, gridProps, selectedCell, dispatches }) =>
         e.preventDefault();
         e.stopPropagation();
       }}
-      onKeyDown={createOnKeyDownHandler(rules, gridProps, selectedCell, dispatches)}
+      onKeyDown={createOnKeyDownHandler(playMode, rules, gridProps, selectedCell, dispatches)}
       tabIndex="-1" // allow focus so we can read keystrokes, but don't let user tab to focus this div
     >
       <svg
@@ -28,7 +28,7 @@ let Grid = ({ cells, rules, rendering, gridProps, selectedCell, dispatches }) =>
           e.preventDefault();
           dispatches.onGridMouseUp();
         }}
-        onMouseDown={createOnCellMouseDownHandler(cells, rules, gridProps, dispatches)}
+        onMouseDown={createOnCellMouseDownHandler(cells, playMode, rules, gridProps, dispatches)}
         onMouseOver={createOnCellMouseOverHandler(dispatches)}
         onClick={createOnCellClickHandler(dispatches)}
         height={gridProps.renderHeight}

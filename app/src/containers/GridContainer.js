@@ -53,6 +53,7 @@ const mapStateToProps = (state) => {
 
   let ret = {
     cells: cells,
+    playMode: state.get('playMode'),
     rules: rules,
     rendering: rendering,
     gridProps: {
